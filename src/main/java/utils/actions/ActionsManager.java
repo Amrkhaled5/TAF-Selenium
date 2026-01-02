@@ -1,9 +1,10 @@
-package utils;
+package utils.actions;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import utils.logs.LogsManager;
 
 import java.io.File;
 
@@ -18,25 +19,27 @@ public class ActionsManager {
 
 
     public void click(By locator){
-        waitingManager.getFluentWait(10,500).until(webDriver -> {
-                    try {
-                        WebElement element=webDriver.findElement(locator);
-                        new Actions(webDriver).scrollToElement(element).click();
-                        return true;
-                    }
-                    catch (Exception e){
-                        return false;
-                    }
+        waitingManager.getFluentWait().until(webDriver -> {
+            try {
+                WebElement element=webDriver.findElement(locator);
+                new Actions(webDriver).scrollToElement(element).click();
+                LogsManager.info("Clicked on element located by: ",locator.toString());
+                return true;
+            }
+            catch (Exception e){
+                return false;
+            }
         });
     }
 
     public void type(By locator, String text){
-        waitingManager.getFluentWait(10,500).until(webDriver -> {
+        waitingManager.getFluentWait().until(webDriver -> {
             try {
                 WebElement element=webDriver.findElement(locator);
                 scrollToElement(locator);
                 element.clear();
                 element.sendKeys(text);
+                LogsManager.info("Typed text '",text,"' into element located by: ",locator.toString());
                 return true;
             }
             catch (Exception e){
@@ -46,11 +49,12 @@ public class ActionsManager {
     }
 
     public String getText(By locator){
-        return waitingManager.getFluentWait(10,500).until(webDriver -> {
+        return waitingManager.getFluentWait().until(webDriver -> {
             try {
                 WebElement element=webDriver.findElement(locator);
                 scrollToElement(locator);
                 String text=element.getText();
+                LogsManager.info("Retrieved text '",text,"' from element located by: ",locator.toString());
                 return !text.isEmpty() ? text : null;
             }
             catch (Exception e){
@@ -61,11 +65,12 @@ public class ActionsManager {
 
     public void uploadFile(By locator, String filePath){
         String absolutePath=System.getProperty("user.dir")+ File.separator +filePath;
-        waitingManager.getFluentWait(10,500).until(webDriver -> {
+        waitingManager.getFluentWait().until(webDriver -> {
             try {
                 WebElement element=webDriver.findElement(locator);
                 scrollToElement(locator);
                 element.sendKeys(filePath);
+                LogsManager.info("Uploaded file '",absolutePath,"' using element located by: ",locator.toString());
                 return true;
             }
             catch (Exception e){
@@ -77,9 +82,10 @@ public class ActionsManager {
     /// ///////// Alert Methods /////////
 
     public void acceptAlert(){
-        waitingManager.getFluentWait(10,500).until(webDriver -> {
+        waitingManager.getFluentWait().until(webDriver -> {
             try {
                 webDriver.switchTo().alert().accept();
+                LogsManager.info("Accepted alert");
                 return true;
             }
             catch (Exception e){
@@ -89,9 +95,10 @@ public class ActionsManager {
     }
 
     public String getAlertText() {
-        return waitingManager.getFluentWait(10, 500).until(webDriver -> {
+        return waitingManager.getFluentWait().until(webDriver -> {
             try {
                 String text = webDriver.switchTo().alert().getText();
+                LogsManager.info("Retrieved alert text: ", text);
                 return !text.isEmpty() ? text : null;
             } catch (Exception e) {
                 return null;
@@ -100,9 +107,10 @@ public class ActionsManager {
     }
 
     public void sendTextToAlert(String text){
-        waitingManager.getFluentWait(10,500).until(webDriver -> {
+        waitingManager.getFluentWait().until(webDriver -> {
             try {
                 webDriver.switchTo().alert().sendKeys(text);
+                LogsManager.info("Sent text '",text,"' to alert");
                 return true;
             }
             catch (Exception e){
@@ -112,9 +120,10 @@ public class ActionsManager {
     }
 
     public void dismissAlert(){
-        waitingManager.getFluentWait(10,500).until(webDriver -> {
+        waitingManager.getFluentWait().until(webDriver -> {
             try {
                 webDriver.switchTo().alert().dismiss();
+                LogsManager.info("Dismissed alert");
                 return true;
             }
             catch (Exception e){
@@ -126,9 +135,11 @@ public class ActionsManager {
     /// ///////// Frame Methods /////////
 
     public void switchToFrameByIndex(int index){
-        waitingManager.getFluentWait(10,500).until(webDriver -> {
+        waitingManager.getFluentWait().until(webDriver -> {
             try {
                 webDriver.switchTo().frame(index);
+                LogsManager.info("Switched to frame with index: ",String.valueOf(index));
+
                 return true;
             }
             catch (Exception e){
@@ -138,9 +149,10 @@ public class ActionsManager {
     }
 
     public void switchToFrameByNameOrId(String nameOrId){
-        waitingManager.getFluentWait(10,500).until(webDriver -> {
+        waitingManager.getFluentWait().until(webDriver -> {
             try {
                 webDriver.switchTo().frame(nameOrId);
+                LogsManager.info("Switched to frame with Name or ID: ",nameOrId);
                 return true;
             }
             catch (Exception e){
@@ -150,10 +162,11 @@ public class ActionsManager {
     }
 
     public void switchToFrameByElement(By locator){
-        waitingManager.getFluentWait(10,500).until(webDriver -> {
+        waitingManager.getFluentWait().until(webDriver -> {
             try {
                 WebElement element=webDriver.findElement(locator);
                 webDriver.switchTo().frame(element);
+                LogsManager.info("Switched to frame located by: ",locator.toString());
                 return true;
             }
             catch (Exception e){
@@ -163,9 +176,10 @@ public class ActionsManager {
     }
 
     public void switchToDefaultContent(){
-        waitingManager.getFluentWait(10,500).until(webDriver -> {
+        waitingManager.getFluentWait().until(webDriver -> {
             try {
                 webDriver.switchTo().defaultContent();
+                LogsManager.info("Switched to default content");
                 return true;
             }
             catch (Exception e){

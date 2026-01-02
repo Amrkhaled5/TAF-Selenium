@@ -1,10 +1,12 @@
-package utils;
+package utils.actions;
 
 import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.FluentWait;
+import utils.dataManager.PropertyReader;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
@@ -15,10 +17,10 @@ public class WaitingManager {
         this.driver = driver;
     }
 
-    public FluentWait<WebDriver> getFluentWait(long timeoutInSeconds, long pollingInMillis) {
+    public FluentWait<WebDriver> getFluentWait() {
         return new FluentWait<>(driver)
-                .withTimeout(java.time.Duration.ofSeconds(timeoutInSeconds))
-                .pollingEvery(java.time.Duration.ofMillis(pollingInMillis))
+                .withTimeout(Duration.ofSeconds(Long.parseLong(PropertyReader.getProperty("DEFAULT_WAIT"))))
+                .pollingEvery(Duration.ofMillis(Long.parseLong(PropertyReader.getProperty("polling_interval"))))
                 .ignoreAll(getExceptionsToIgnore());
     }
 

@@ -1,6 +1,7 @@
-package utils;
+package utils.actions;
 
 import org.openqa.selenium.WebDriver;
+import utils.logs.LogsManager;
 
 public class BrowserActions {
     private final WebDriver driver;
@@ -11,6 +12,7 @@ public class BrowserActions {
 
     public void navigateTo(String url){
         driver.navigate().to(url);
+        LogsManager.info("Navigated to URL: ",url);
     }
 
     public void maximizeWindow(){
@@ -18,7 +20,9 @@ public class BrowserActions {
     }
 
     public String getCurrentUrl(){
-        return driver.getCurrentUrl();
+        String url=driver.getCurrentUrl();
+        LogsManager.info("Current URL is: ",url);
+        return url;
     }
 
     public void refreshPage(){
@@ -32,6 +36,7 @@ public class BrowserActions {
     public void openNewTab(String url){
         driver.switchTo().newWindow(org.openqa.selenium.WindowType.TAB);
         driver.navigate().to(url);
+        LogsManager.info("Opened new tab with URL: ",url);
     }
 
 }
